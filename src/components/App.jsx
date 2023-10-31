@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { nanoid } from 'nanoid';
 import styles from './App.module.css';
 import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
+import { nanoid } from 'nanoid';
 
 class App extends Component {
   state = {
@@ -25,18 +25,7 @@ class App extends Component {
     }
   }
 
-  addContact = (name, number) => {
-    const newContact = {
-      id: nanoid(),
-      name,
-      number,
-    };
-
-    if (this.state.contacts.some((contact) => contact.name === name)) {
-      alert(`${name} is already in contacts.`);
-      return;
-    }
-
+  addContact = (newContact) => {
     this.setState((prevState) => ({
       contacts: [...prevState.contacts, newContact],
     }));
@@ -52,18 +41,13 @@ class App extends Component {
     this.setState({ filter });
   };
 
-  getVisibleContacts = () => {
-    const { contacts, filter } = this.state;
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter((contact) =>
-      contact.name && typeof contact.name === 'string' && contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
-  
-
   render() {
-    const { filter } = this.state;
-    const visibleContacts = this.getVisibleContacts();
+    const { filter, contacts } = this.state;
+
+    const normalizedFilter = filter.toLowerCase();
+    const visibleContacts = contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
 
     return (
       <div className={styles.container}>
