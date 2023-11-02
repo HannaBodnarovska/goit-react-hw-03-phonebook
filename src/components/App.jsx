@@ -3,7 +3,7 @@ import styles from './App.module.css';
 import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
-import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid';
 
 class App extends Component {
   state = {
@@ -26,6 +26,14 @@ class App extends Component {
   }
 
   addContact = (newContact) => {
+    const { contacts } = this.state;
+    const isContactExists = contacts.some((contact) => contact.name === newContact.name);
+  
+    if (isContactExists) {
+      alert(`${newContact.name} is already in contacts.`);
+      return;
+    }
+  
     this.setState((prevState) => ({
       contacts: [...prevState.contacts, newContact],
     }));
@@ -46,8 +54,8 @@ class App extends Component {
 
     const normalizedFilter = filter.toLowerCase();
     const visibleContacts = contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
+      contact.name && contact.name.toLowerCase().includes(normalizedFilter)
+      );
 
     return (
       <div className={styles.container}>
